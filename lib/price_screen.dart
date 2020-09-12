@@ -15,10 +15,13 @@ class _PriceScreenState extends State<PriceScreen> {
     getCoinData();
   }
 
+  final url = 'https://rest.coinapi.io/v1/exchangerate';
+  final apiKey = 'apikey=4AF8A67D-C2BA-4FAD-946C-3C0568726A33';
+
   void getCoinData() async {
     CoinData coinData = CoinData();
-    String newValue = await coinData.getCoinData(
-        'https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=4AF8A67D-C2BA-4FAD-946C-3C0568726A33');
+    String newValue =
+        await coinData.getCoinData('$url/BTC/$selectedCurrency?$apiKey');
     setState(() {
       coinValue = newValue;
     });
@@ -44,6 +47,7 @@ class _PriceScreenState extends State<PriceScreen> {
         setState(
           () {
             selectedCurrency = value;
+            getCoinData();
           },
         );
       },
@@ -61,6 +65,7 @@ class _PriceScreenState extends State<PriceScreen> {
       itemExtent: 32.0,
       onSelectedItemChanged: (selectedIndex) {
         print(selectedIndex);
+        getCoinData();
       },
       children: dropdownItems,
     );
@@ -87,7 +92,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = $coinValue USD',
+                  '1 BTC = $coinValue $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
